@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>스크린세이버 설정</title>
+<style>
+  :root { --pri:#4f46e5; --fg:#0f172a; --mut:#64748b; --line:#e2e8f0; }
+  * { box-sizing:border-box; }
+  body { font:14px/1.5 "Pretendard","Malgun Gothic",system-ui,sans-serif; margin:0; color:var(--fg); background:#f8fafc; }
+  .wrap { padding:24px; }
+  h2 { margin:0 0 4px; font-size:18px; }
+  .sub { color:var(--mut); margin:0 0 20px; font-size:13px; }
+  label { display:block; margin-bottom:14px; font-weight:600; font-size:13px; }
+  input { width:100%; padding:9px 11px; margin-top:6px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff; }
+  input:focus { outline:2px solid #c7d2fe; border-color:var(--pri); }
+  small { color:var(--mut); font-weight:400; }
+  .row { display:flex; gap:8px; margin-top:6px; }
+  button { padding:9px 16px; border:1px solid var(--line); background:#fff; border-radius:8px; cursor:pointer; font:inherit; font-weight:600; }
+  button.p { background:var(--pri); color:#fff; border-color:var(--pri); }
+  #msg { margin-top:14px; min-height:1.4em; font-size:13px; }
+  .ok { color:#15803d; } .bad { color:#b91c1c; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h2>스크린세이버 설정</h2>
+<p class="sub">콘텐츠를 가져올 서버의 주소를 입력하세요.</p>
+<label>서버 주소 <small>(예: http://192.168.0.10:8080)</small><input id="serverUrl" placeholder="http://서버IP:포트"></label>
+<label>동기화 주기(분)<input id="pollMinutes" type="number" min="1" value="10"></label>
+<div class="row"><button id="test">연결 테스트</button><button id="save" class="p">저장</button></div>
+<div id="msg"></div>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const msg = (t, c) => { $('msg').textContent = t; $('msg').className = c || ''; };
+const read = () => ({ serverUrl: $('serverUrl').value.trim().replace(/\/+$/, ''), pollMinutes: +$('pollMinutes').value || 10 });
+const valid = (u) => /^https?:\/\/[^\s\/:]+(:\d{1,5})?$/i.test(u);
+saver.getConfig().then((c) => { $('serverUrl').value = c.serverUrl; $('pollMinutes').value = c.pollMinutes; });
+$('test').onclick = async () => {
+  const c = read();
+  if (!valid(c.serverUrl)) return msg('주소 형식이 올바르지 않습니다. 예: http://192.168.0.10:8080', 'bad');
+  msg('확인 중...');
+  const r = await saver.testConfig(c);
+  r.online ? msg(`연결 성공 - 재생 목록 ${r.count}개`, 'ok') : msg('서버에 연결할 수 없습니다. 주소와 포트를 확인하세요.', 'bad');
+};
+$('save').onclick = async () => {
+  const c = read();
+  if (!valid(c.serverUrl)) return msg('주소 형식이 올바르지 않습니다. 예: http://192.168.0.10:8080', 'bad');
+  await saver.saveConfig(c); msg('저장되었습니다.', 'ok');
+};
+</script>
+</body>
+</html>

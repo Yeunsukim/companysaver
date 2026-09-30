@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+  /* 1920x1080 고정 크기로 제작한 예: 등록 화면에서 '기준 해상도로 확대·축소'를 선택하세요 */
+  html, body { margin:0; }
+  #stage { position:relative; width:1920px; height:1080px; overflow:hidden; font-family:"Malgun Gothic",sans-serif; color:#fff;
+           background:linear-gradient(135deg,#0f172a,#1e3a8a 60%,#0ea5e9); }
+  #stage::before { content:""; position:absolute; inset:0; border:12px solid #fbbf24; }
+  h1 { position:absolute; top:380px; left:0; right:0; margin:0; text-align:center; font-size:150px; }
+  p  { position:absolute; top:600px; left:0; right:0; margin:0; text-align:center; font-size:56px; opacity:.85; }
+  .c { position:absolute; width:120px; height:120px; background:#fbbf24; color:#0f172a; font-size:44px; font-weight:700; display:grid; place-items:center; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="c" style="top:12px;left:12px">TL</div><div class="c" style="top:12px;right:12px">TR</div>
+  <div class="c" style="bottom:12px;left:12px">BL</div><div class="c" style="bottom:12px;right:12px">BR</div>
+  <h1>1920 × 1080</h1><p>고정 크기 HTML - 네 모서리가 모두 보이면 '전체 보이기'입니다</p>
+</div>
+</body>
+</html>

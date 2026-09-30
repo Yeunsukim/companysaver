@@ -1,0 +1,6 @@
+html, body { margin:0; height:100%; overflow:hidden; background:#0b1020; font-family:"Malgun Gothic", sans-serif; color:#fff; }
+canvas { position:absolute; inset:0; }
+#box { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; text-shadow:0 2px 20px rgba(0,0,0,.6); }
+#time { font-size:12vw; font-weight:200; letter-spacing:.05em; }
+#date { font-size:3vw; opacity:.85; }
+p { opacity:.5; margin-top:3vw; font-size:1.4vw; }

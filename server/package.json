@@ -1,0 +1,14 @@
+{
+  "name": "screensaver-server",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": { "start": "node src/index.js" },
+  "engines": { "node": ">=22.13" },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}

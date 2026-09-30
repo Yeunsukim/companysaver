@@ -1,0 +1,38 @@
+{
+  "name": "company-screensaver",
+  "version": "1.0.0",
+  "description": "Company Screen Saver Client",
+  "author": "Company",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron . /s",
+    "start:debug": "electron . /s --windowed",
+    "config": "electron . /c",
+    "pack": "electron-packager . CompanySaver --platform=win32 --arch=x64 --out=dist --overwrite --prune=true --ignore=^/dist --ignore=^/installer --ignore=^/release",
+    "dist": "electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "com.company.screensaver",
+    "productName": "CompanySaver",
+    "directories": { "output": "release" },
+    "files": ["main.js", "preload.js", "sync.js", "player.html", "player.js", "settings.html", "config.json"],
+    "win": { "target": "nsis", "signAndEditExecutable": false },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "allowElevation": false,
+      "artifactName": "CompanySaver-Setup.exe",
+      "include": "installer/installer.nsh",
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": false,
+      "deleteAppDataOnUninstall": true
+    }
+  },
+  "devDependencies": {
+    "@electron/packager": "^18.3.6",
+    "electron": "^33.2.1",
+    "electron-builder": "^26.15.3"
+  }
+}

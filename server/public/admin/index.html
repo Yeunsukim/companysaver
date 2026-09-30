@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>스크린세이버 관리</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 로그인 -->
+<div id="login" class="login hidden">
+  <div class="brand">
+    <div class="logo"><span class="mark" data-ic="monitor"></span>Screen Saver Manager</div>
+    <div>
+      <h2>사내 스크린세이버를<br>한 곳에서 관리하세요</h2>
+      <p>게시 기간에 맞춰 HTML, 이미지, 동영상을 모든 PC의 화면 보호기에 배포합니다. 듀얼 모니터를 지원합니다.</p>
+      <div class="duo"><i></i><i></i></div>
+    </div>
+    <div class="muted sm" style="color:#94a3b8">© Screen Saver Manager</div>
+  </div>
+  <div class="formside">
+    <form id="loginForm">
+      <h1>로그인</h1>
+      <p class="lead">관리자 계정으로 로그인하세요.</p>
+      <label class="field"><span class="lbl">아이디</span><input class="inp" name="username" autocomplete="username" required autofocus></label>
+      <label class="field"><span class="lbl">비밀번호</span><input class="inp" name="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn pri lg block">로그인</button>
+      <p class="err" id="loginErr"></p>
+    </form>
+  </div>
+</div>
+
+<!-- 앱 -->
+<div id="app" class="shell hidden">
+  <aside class="side">
+    <div class="logo"><span class="mark" data-ic="monitor"></span>Screen Saver</div>
+    <nav class="nav">
+      <div class="cap">메뉴</div>
+      <button data-view="list"><span data-ic="grid"></span>콘텐츠 관리</button>
+      <button data-view="form"><span data-ic="plus"></span>콘텐츠 등록</button>
+      <button data-view="preview"><span data-ic="monitor"></span>미리보기</button>
+    </nav>
+    <div class="grow"></div>
+    <div class="user">
+      <div class="who"><span class="avatar" id="avatar">A</span><span id="userName">admin</span></div>
+      <button id="pwBtn"><span data-ic="key"></span>비밀번호 변경</button>
+      <button id="logoutBtn"><span data-ic="logout"></span>로그아웃</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- 목록 -->
+    <section id="view-list">
+      <div class="page-head">
+        <div><h1>콘텐츠 관리</h1><p>게시 중인 스크린세이버 콘텐츠를 확인하고 순서를 조정합니다.</p></div>
+        <span class="grow"></span>
+        <button class="btn" id="playAllBtn"><span data-ic="play"></span>전체 미리보기</button>
+        <button class="btn pri" id="newBtn"><span data-ic="plus"></span>새 콘텐츠 등록</button>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="card">
+        <div class="toolbar">
+          <div class="search"><span data-ic="search"></span><input class="inp" id="q" placeholder="제목, 요청 부서, 담당자 검색"></div>
+          <select class="inp" id="fDept" style="width:auto"><option value="">전체 부서</option></select>
+          <span class="grow"></span>
+          <span class="muted sm" id="count"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="tbl">
+            <thead><tr><th style="width:34px"></th><th>콘텐츠</th><th>유형</th><th>요청 부서 / 담당자</th><th>게시 기간</th><th>모니터</th><th>시간</th><th>상태</th><th>사용</th><th></th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <div class="empty hidden" id="empty">
+          <div class="big" data-ic="grid"></div>
+          <h3>표시할 콘텐츠가 없습니다</h3>
+          <p>새 콘텐츠를 등록하면 이곳에 표시됩니다.</p>
+          <button class="btn pri" id="emptyNew"><span data-ic="plus"></span>새 콘텐츠 등록</button>
+        </div>
+        <div class="tip">행을 드래그해서 재생 순서를 바꿀 수 있습니다. (필터가 적용된 상태에서는 순서 변경이 비활성화됩니다)</div>
+      </div>
+    </section>
+
+    <!-- 등록/수정 -->
+    <section id="view-form" class="hidden">
+      <div class="page-head">
+        <div><h1 id="formTitle">콘텐츠 등록</h1><p id="formSub">새 스크린세이버 콘텐츠를 등록합니다.</p></div>
+      </div>
+      <form id="form">
+        <input type="hidden" name="id">
+        <input type="hidden" name="type" value="html">
+        <div class="form-grid">
+          <div class="stack">
+            <div class="card">
+              <div class="card-h">1. 콘텐츠 종류</div>
+              <div class="card-b">
+                <div class="types" id="types"></div>
+                <label class="field" id="fileWrap">
+                  <span class="lbl">파일 <em>*</em><small id="fileHint"></small></span>
+                  <label class="drop" id="drop">
+                    <span data-ic="upload"></span>
+                    <b>파일을 끌어다 놓거나 클릭해서 선택</b>
+                    <span class="sm" id="dropSub"></span>
+                    <div class="fname" id="fname"></div>
+                    <input type="file" name="file" id="fileInp">
+                  </label>
+                </label>
+                <label class="field hidden" id="urlWrap"><span class="lbl">URL <em>*</em></span><input class="inp" name="url" placeholder="https://"></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-h">2. 기본 정보</div>
+              <div class="card-b">
+                <label class="field"><span class="lbl">제목 <em>*</em></span><input class="inp" name="title" required maxlength="100" placeholder="예: 3분기 보안 캠페인"></label>
+                <div class="g2">
+                  <label class="field"><span class="lbl">요청 부서<small>기록용</small></span><input class="inp" name="department" list="deptList" placeholder="예: 정보보안팀"></label>
+                  <label class="field"><span class="lbl">담당자(요청자)</span><input class="inp" name="owner" placeholder="예: 홍길동"></label>
+                </div>
+                <datalist id="deptList"></datalist>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-h">3. 게시 설정</div>
+              <div class="card-b">
+                <div class="g2">
+                  <label class="field"><span class="lbl">게시 시작<small>비우면 즉시</small></span><input class="inp" type="datetime-local" name="start_at"></label>
+                  <label class="field"><span class="lbl">게시 종료<small>비우면 계속</small></span><input class="inp" type="datetime-local" name="end_at"></label>
+                </div>
+                <div class="presets" id="presets">
+                  <button type="button" data-d="7">지금부터 1주</button><button type="button" data-d="30">1개월</button><button type="button" data-d="90">3개월</button><button type="button" data-d="0">기간 제한 없음</button>
+                </div>
+                <div class="g2" style="margin-top:18px">
+                  <label class="field"><span class="lbl">표시 시간(초)<small>영상은 끝까지 재생</small></span><input class="inp" type="number" name="duration_sec" value="10" min="1" max="3600"></label>
+                  <div class="field"><span class="lbl">사용 여부</span>
+                    <div class="row-between" style="padding-top:6px"><span class="muted sm">끄면 게시 기간이어도 표시되지 않습니다</span><label class="switch"><input type="checkbox" name="enabled" checked><span></span></label></div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:0"><span class="lbl">표시할 모니터</span>
+                  <div class="seg" id="monSeg">
+                    <label><input type="radio" name="monitor_target" value="all" checked><span class="opt"><span class="mon"><i class="on"></i><i class="on"></i></span>모든 모니터</span></label>
+                    <label><input type="radio" name="monitor_target" value="primary"><span class="opt"><span class="mon"><i class="on"></i><i></i></span>주 모니터</span></label>
+                    <label><input type="radio" name="monitor_target" value="secondary"><span class="opt"><span class="mon"><i></i><i class="on"></i></span>보조 모니터</span></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-h">4. 화면 맞춤 <span class="sub">모니터 크기가 달라도 자동으로 맞춥니다</span></div>
+              <div class="card-b">
+                <div id="htmlFit">
+                  <span class="lbl" style="display:block;font-weight:600;font-size:13px;margin-bottom:6px">HTML 제작 방식</span>
+                  <div class="seg two" id="scaleSeg">
+                    <label><input type="radio" name="scale_mode" value="responsive" checked><span class="opt txt"><b>자동 (반응형)</b><small>모니터 크기를 그대로 사용합니다. vw/vh, %, flex 등으로 만든 HTML에 적합합니다.</small></span></label>
+                    <label><input type="radio" name="scale_mode" value="fixed"><span class="opt txt"><b>기준 해상도로 확대·축소</b><small>1920×1080처럼 고정 크기로 만든 HTML을 모니터에 맞춰 크기를 조절합니다.</small></span></label>
+                  </div>
+                  <div class="g2 hidden" id="baseBox" style="margin-top:14px">
+                    <label class="field"><span class="lbl">기준 해상도</span>
+                      <select class="inp" id="basePreset">
+                        <option value="1920x1080">1920 × 1080 (FHD 16:9)</option><option value="1280x720">1280 × 720 (HD 16:9)</option>
+                        <option value="2560x1440">2560 × 1440 (QHD 16:9)</option><option value="3840x2160">3840 × 2160 (4K 16:9)</option>
+                        <option value="1920x1200">1920 × 1200 (16:10)</option><option value="1366x768">1366 × 768</option>
+                        <option value="1024x768">1024 × 768 (4:3)</option><option value="custom">직접 입력</option>
+                      </select></label>
+                    <div class="g2"><label class="field"><span class="lbl">너비(px)</span><input class="inp" type="number" name="base_w" value="1920" min="100" max="10000"></label>
+                      <label class="field"><span class="lbl">높이(px)</span><input class="inp" type="number" name="base_h" value="1080" min="100" max="10000"></label></div>
+                  </div>
+                </div>
+                <div id="fitField" style="margin-top:16px">
+                  <span class="lbl" style="display:block;font-weight:600;font-size:13px;margin-bottom:6px">모니터 비율이 다를 때</span>
+                  <div class="seg two">
+                    <label><input type="radio" name="fit" value="contain" checked><span class="opt txt"><b>전체 보이기 (여백)</b><small>잘리는 부분 없이 전체를 보여 주고, 남는 곳은 검은색으로 채웁니다.</small></span></label>
+                    <label><input type="radio" name="fit" value="cover"><span class="opt txt"><b>꽉 채우기</b><small>화면을 빈틈없이 채웁니다. 가장자리가 잘릴 수 있습니다.</small></span></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="err" id="formErr"></p>
+            <div class="form-actions">
+              <button type="button" class="btn lg" id="cancelBtn">취소</button>
+              <button class="btn pri lg" id="saveBtn">저장</button>
+            </div>
+          </div>
+
+          <aside class="sticky">
+            <div class="card">
+              <div class="card-h">실시간 미리보기 <span class="sub">저장 전에도 확인</span></div>
+              <div class="card-b">
+                <div class="pv-screen" id="formPv"></div>
+                <p class="muted sm" style="margin:12px 0 0" id="pvNote"></p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </form>
+    </section>
+
+    <!-- 미리보기 -->
+    <section id="view-preview" class="hidden">
+      <div class="page-head">
+        <div><h1>미리보기</h1><p>클라이언트 PC의 듀얼 모니터에서 재생되는 모습을 그대로 시뮬레이션합니다.</p></div>
+      </div>
+      <div class="pv-bar">
+        <select class="inp" id="pvScope" style="width:auto">
+          <option value="active">게시 중인 콘텐츠</option>
+          <option value="all">모든 콘텐츠 (비활성/기간외 포함)</option>
+        </select>
+        <button class="btn pri" id="pvToggle"><span data-ic="pause"></span><span id="pvToggleT">일시정지</span></button>
+        <button class="btn" id="pvNext"><span data-ic="skip"></span>다음</button>
+        <button class="btn" id="pvRestart">처음부터</button>
+        <select class="inp" id="pvAspect" style="width:auto" title="모니터 화면 비율">
+          <option value="16/9">화면 비율 16:9</option><option value="16/10">화면 비율 16:10</option>
+          <option value="21/9">화면 비율 21:9 (울트라와이드)</option><option value="4/3">화면 비율 4:3</option>
+        </select>
+        <span class="grow"></span>
+        <span class="muted sm" id="pvInfo"></span>
+      </div>
+      <div class="monitors" id="monitors"></div>
+    </section>
+  </main>
+</div>
+
+<dialog id="pwDlg">
+  <form method="dialog" id="pwForm">
+    <h2>비밀번호 변경</h2>
+    <label class="field"><span class="lbl">현재 비밀번호</span><input class="inp" type="password" name="current" required></label>
+    <label class="field"><span class="lbl">새 비밀번호<small>6자 이상</small></span><input class="inp" type="password" name="next" required minlength="6"></label>
+    <p class="err" id="pwErr"></p>
+    <div class="dlg-actions"><button class="btn" value="cancel" formnovalidate>닫기</button><button class="btn pri" value="ok">변경</button></div>
+  </form>
+</dialog>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

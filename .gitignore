@@ -1,0 +1,21 @@
+# 의존성 (npm install 로 다시 만들 수 있음)
+node_modules/
+
+# 빌드 결과물 (Setup.exe 등)
+release/
+dist/
+server/installer/stage/
+
+# 서버 실제 데이터 (DB, 업로드 파일, 관리자 비밀번호 해시)
+server/data/
+
+# 로그, 환경 설정, 임시 파일
+*.log
+.env
+.env.*
+*.tmp
+
+# OS / 에디터
+Thumbs.db
+.DS_Store
+.vscode/
