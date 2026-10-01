@@ -1,4 +1,4 @@
-# 사내 스크린세이버 (Company Saver V1.0.1)
+# 사내 스크린세이버 (Company Saver V1.0.2)
 
 - `server/` : 콘텐츠 등록·관리 서버 (Node.js 22.13+ / Express / SQLite 내장 `node:sqlite`)
 - `client/` : 각 PC에 설치되는 스크린세이버 (Electron, `.scr`)
