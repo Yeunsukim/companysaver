@@ -1,5 +1,5 @@
 # 사내 스크린세이버
-
+- Company Screen Saver v1.0.0
 - `server/` : 콘텐츠 등록·관리 서버 (Node.js 22.13+ / Express / SQLite 내장 `node:sqlite`)
 - `client/` : 각 PC에 설치되는 스크린세이버 (Electron, `.scr`)
 - `samples/` : 샘플 (JS/CSS 포함 HTML ZIP, SVG 이미지)
